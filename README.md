@@ -30,8 +30,4 @@ GET /api/file/filter - get list of files with filter
 mvn spring-boot:run
 
 
-#####p.s.
-I did not implement only last point.
-
-
 
