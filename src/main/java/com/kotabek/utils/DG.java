@@ -5,8 +5,12 @@ package com.kotabek.utils;
  */
 public class DG {
     public static String getString(Object obj) {
+        return getString(obj, "");
+    }
+
+    public static String getString(Object obj, String def) {
         if (obj == null) {
-            return "";
+            return def;
 
         } else if (obj instanceof String) {
             return (String) obj;

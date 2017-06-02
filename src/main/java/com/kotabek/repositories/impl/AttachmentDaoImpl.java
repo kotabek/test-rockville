@@ -78,13 +78,25 @@ public class AttachmentDaoImpl implements AttachmentDao {
             sql += " and LCASE(name) like ? ";
             params.add("%" + filterTO.getName().toLowerCase() + "%");
         }
-        if (filterTO.getMinSize() != null && filterTO.getMinSize() > 0) {
+        if (filterTO.getMinSize() != null
+            && filterTO.getMinSize() > 0) {
             sql += " and size >= ? ";
             params.add(filterTO.getMinSize());
         }
-        if (filterTO.getMaxSize() != null && filterTO.getMaxSize() > 0) {
+        if (filterTO.getMaxSize() != null
+            && filterTO.getMaxSize() > 0) {
             sql += " and size <= ? ";
             params.add(filterTO.getMaxSize());
+        }
+        if (filterTO.getBeforeTime() != null
+            && filterTO.getBeforeTime() > 0) {
+            sql += " and created < ? ";
+            params.add(filterTO.getBeforeTime());
+        }
+        if (filterTO.getAfterTime() != null
+            && filterTO.getAfterTime() > 0) {
+            sql += " and created >= ? ";
+            params.add(filterTO.getAfterTime());
         }
 
         return jdbcTemplate.query(sql,

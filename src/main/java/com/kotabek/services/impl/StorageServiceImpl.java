@@ -56,7 +56,8 @@ public class StorageServiceImpl implements StorageService {
 
     @Override
     public List<AttachmentTO> search(AttachmentFilterTO filterTO) {
-        if (filterTO == null || filterTO.isEmpty()) {
+        if (filterTO == null
+            || filterTO.isEmpty()) {
             return this.attachmentDao.getAll();
         }
         return this.attachmentDao.search(filterTO);
