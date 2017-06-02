@@ -1,0 +1,75 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Upload file</title>
+</head>
+<body>
+
+<div th:if="${message}">
+    <h2 th:text="${message}"/>
+</div>
+
+<div>
+    <form method="POST" enctype="multipart/form-data" action="/">
+        <h3>Upload</h3>
+        <table>
+            <tr>
+                <td>File to upload:</td>
+                <td><input type="file" name="file"/></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Upload"/></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<div>
+    <form method="GET" action="/files">
+        <h3>Filter</h3>
+        <table>
+            <tr>
+                <td>Name:</td>
+                <td><input type="text" name="name" th:value="${filter.name}"/></td>
+            </tr>
+            <tr>
+                <td>Min size:</td>
+                <td><input type="number" name="minSize" th:value="${filter.minSize}"/></td>
+            </tr>
+            <tr>
+                <td>Max size:</td>
+                <td><input type="number" name="maxSize" th:value="${filter.maxSize}"/></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Apply"/></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<div>
+    <table>
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Name</td>
+                <td>Size</td>
+                <td>ContentType</td>
+                <td>Uploaded</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="file : ${files}">
+                <td th:text="${file.id}"></td>
+                <td><a th:href="'/api/file/stream/'+${file.id}" th:text="${file.name}"/></td>
+                <td th:text="${file.size}"></td>
+                <td th:text="${file.mime}"></td>
+                <td th:text="${file.createdTime}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
