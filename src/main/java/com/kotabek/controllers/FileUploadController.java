@@ -31,7 +31,30 @@ public class FileUploadController {
                                     @RequestParam(value = "name", required = false) String name,
                                     @RequestParam(value = "minSize", required = false) String minSize,
                                     @RequestParam(value = "maxSize", required = false) String maxSize) throws IOException {
-        AttachmentFilterTO filterTO = new AttachmentFilterTO();
+        final AttachmentFilterTO filterTO = new AttachmentFilterTO();
+        final List<AttachmentTO> files = this.getByFilter(name, minSize, maxSize, filterTO);
+
+        model.addAttribute("files", files);
+        model.addAttribute("filter", filterTO);
+
+        return "uploadForm";
+    }
+
+    @GetMapping("/api/file/filter")
+    @ResponseBody
+    public ResponseEntity<List<AttachmentTO>> filter(
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "minSize", required = false) String minSize,
+            @RequestParam(value = "maxSize", required = false) String maxSize) {
+        return ResponseEntity
+                .ok()
+                .body(this.getByFilter(name, minSize, maxSize, new AttachmentFilterTO()));
+    }
+
+    private List<AttachmentTO> getByFilter(String name,
+                                           String minSize,
+                                           String maxSize,
+                                           AttachmentFilterTO filterTO) {
         if (StringUtils.isNotEmpty(name)) {
             filterTO.setName(name);
         }
@@ -41,16 +64,11 @@ public class FileUploadController {
         if (StringUtils.isNotEmpty(maxSize)) {
             filterTO.setMaxSize(DG.getLong(maxSize));
         }
-        List<AttachmentTO> files = null;
-        if (filterTO.isEmpty()) {
-            files = storageService.loadAll();
-        } else {
-            files = storageService.search(filterTO);
-        }
-        model.addAttribute("files", files);
-        model.addAttribute("filter", filterTO);
 
-        return "uploadForm";
+        if (filterTO.isEmpty()) {
+            return storageService.loadAll();
+        }
+        return storageService.search(filterTO);
     }
 
     @GetMapping("/api/file/stream/{fileId}")
@@ -89,7 +107,7 @@ public class FileUploadController {
                 .body(file);
     }
 
-    @PostMapping("/")
+    @PostMapping("/files")
     public String handleFileUpload(
             @RequestParam("file") MultipartFile file,
             RedirectAttributes redirectAttributes) {
