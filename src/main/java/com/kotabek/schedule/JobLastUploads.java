@@ -21,12 +21,12 @@ public class JobLastUploads {
     @Autowired
     private StorageService storageService;
 
-    //    @Scheduled(fixedRate = 1000 * 60 * 30)
-    @Scheduled(cron = "0 0/30 * * * *")
+        @Scheduled(fixedRate = 1000 * 60 * 60)
+//    @Scheduled(cron = "0 0/30 * * * *")
 //    @Scheduled(cron = "0 0/1 * * * *")
     public void reportCurrentTime() {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, -30);
+        calendar.add(Calendar.HOUR, -1);
         AttachmentFilterTO filterTO = new AttachmentFilterTO();
         filterTO.setAfterTime(calendar.getTimeInMillis());
         List<AttachmentTO> list = storageService.search(filterTO);
